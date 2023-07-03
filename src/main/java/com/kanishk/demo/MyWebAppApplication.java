@@ -1,5 +1,8 @@
 package com.kanishk.demo;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,10 +15,10 @@ public class MyWebAppApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context =  SpringApplication.run(MyWebAppApplication.class, args);
 		UserRepo userRepository = context.getBean(UserRepo.class);
-		User user = new User();
-		user.setName("Kanishk");
-		user.setCity("Ranchi");
-		user.setStatus("married");
+		User user1 = new User();
+		user1.setName("Kanishk");
+		user1.setCity("Ranchi");
+		user1.setStatus("married");
 		
 		User user2 = new User();
 		user2.setName("Pankaj");
@@ -27,11 +30,35 @@ public class MyWebAppApplication {
 		user3.setCity("Pune");
 		user3.setStatus("divorced");
 		
-	    User u1 = userRepository.save(user);
-	    User u2 = userRepository.save(user2);
-	    User u3 = userRepository.save(user3);
+		List<User> users = List.of(user1,user2,user3);
+		
+	    Iterable<User> res = userRepository.saveAll(users);
 	    
-	    System.out.println(u1 +"\n"+u2+"\n"+u3);
+	    res.forEach(user ->{
+	    	System.out.println(user);
+	    });
+	    
+	    //Update the user data
+	    
+	    Optional<User> optional = userRepository.findById(1);
+	    
+	    User get = optional.get();
+	    
+	    get.setName("Ankit");
+	    
+	    User result = userRepository.save(get);
+	    
+	    System.out.println(result);
+	    
+	    // deleting the user from the database
+	    
+	    userRepository.deleteById(52);
+	    
+	    System.out.println("User Deleted");
+	    
+	    
+	    
+
 	    
 	    
 		
